@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lilac Calendar</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .calendar {
+      width: 100%;
+      padding: 20px;
+      background: #211936;
+      border: 1px solid #45345f;
+      border-radius: 16px;
+      color: #e8d9ff;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 19px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .sparkle { color: #c6a5ff; }
+
+    .weekdays, .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      gap: 6px;
+    }
+
+    .weekdays {
+      margin-bottom: 12px;
+      color: #a992c9;
+      font-size: 12px;
+    }
+
+    .days { font-size: 13px; }
+
+    .day {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1;
+      border-radius: 9px;
+    }
+
+    .today {
+      background: #b99af5;
+      color: #211936;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #a992c9;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar">
+    <div class="calendar-header">
+      <span id="month"></span>
+      <span class="sparkle">✦</span>
+    </div>
+    <div class="weekdays" id="weekdays"></div>
+    <div class="days" id="days"></div>
+    <div class="footer">✧ um dia de cada vez ✧</div>
+  </div>
+
+  <script>
+    function atualizarCalendario() {
+      const agora = new Date();
+      const ano = agora.getFullYear();
+      const mes = agora.getMonth();
+      const hoje = agora.getDate();
+
+      document.getElementById("month").textContent =
+        new Intl.DateTimeFormat("pt-BR", {
+          month: "long",
+          year: "numeric"
+        }).format(agora);
+
+      const semana = document.getElementById("weekdays");
+      semana.innerHTML = "";
+
+      ["D", "S", "T", "Q", "Q", "S", "S"].forEach(dia => {
+        const elemento = document.createElement("div");
+        elemento.textContent = dia;
+        semana.appendChild(elemento);
+      });
+
+      const dias = document.getElementById("days");
+      dias.innerHTML = "";
+
+      const primeiroDia = new Date(ano, mes, 1).getDay();
+      const totalDias = new Date(ano, mes + 1, 0).getDate();
+
+      for (let i = 0; i < primeiroDia; i++) {
+        dias.appendChild(document.createElement("div"));
+      }
+
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const elemento = document.createElement("div");
+        elemento.className = "day";
+        elemento.textContent = dia;
+
+        if (dia === hoje) {
+          elemento.classList.add("today");
+        }
+
+        dias.appendChild(elemento);
+      }
+    }
+
+    atualizarCalendario();
+    setInterval(atualizarCalendario, 60000);
+  </script>
+</body>
+</html>
